@@ -14,32 +14,31 @@ DATE: Sunday, Sept 9th 2014
 import argparse
 import os
 
-keys = [
-	u'Up',
-	u'Down',
-	u'Left',
-	u'Right',
-	u'Return',
-	u'space',
-	u'a',
-	u'b',
-	u's',
-]
+keymap = {
+	u'Up' : u'Up', u'up' : u'Up', u'u' : u'Up', u'U' : 'Up',
+	u'Down' : u'Down', u'down' : u'Down', u'd' : u'Down', u'D' : 'Down',
+	u'Left' : u'Left', u'left' : u'Left', u'l' : u'Left', u'L' : 'Left',
+	u'Right' : u'Right', u'right' : u'Right', u'r' : u'Right', u'R' : 'Right',
+	u'a' : u'a', u'A' : u'a',
+	u'b' : u'b', u'B' : u'b',
+	u's' : u's', u'S' : u's',
+	u'x' : u'x', u'X' : u'x',
+}
 
 class Key(object):
 	@staticmethod
 	def press(key, windowname, delay=150):
 		'''Make a simple system call to press a button on a window
 		'''
-		if key not in keys:
+		if key not in keymap:
 			return
+		k = keymap[key]
 		os_call = u'HWID=`xwininfo -name "{windowname}" | grep "Window id" | cut -d" " -f4`; \
 			DWID=$(($HWID)); \
 			xdotool windowfocus $DWID; \
 			xdotool  keydown --delay {delay} {key} keyup {key}'.format(
-			#xdotool  key --window "$DWID" {key}'.format(
 				windowname=windowname,
-				key=key,
+				key=k,
 				delay=unicode(delay))
 		retvalue = os.system(os_call.encode('utf-8'))
 
