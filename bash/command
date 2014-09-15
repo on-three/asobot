@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#WID=`xdotool search --name "Nestopia" | head -n1`
+#echo "Found window id $WID"
+#xdotool windowfocus $WID
+#xdotool key Down Down Down Down
+#xdotool key d
+#xdotool key "Return"
+#echo "done"
+
+HWID=`xwininfo -name "Nestopia" | grep "Window id" | cut -d' ' -f4`
+DWID=$(($HWID))
+xdotool windowfocus $DWID
+#xdotool key Down Down Down
+xdotool  keydown --delay 150 Down keyup Down
+#xdotool sleep 0.2
+#xdotool keyup Down
+#wids=`xdotool search --name ""`
+#for wid in $wids; do
+#  wname=`xdotool getwindowname $wid`
+#  if [ -n "$wname" ]; then
+#    echo $wid --- $wname
+#  fi
+#done
