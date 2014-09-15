@@ -27,7 +27,7 @@ keymap = {
 
 class Key(object):
 	@staticmethod
-	def press(key, windowname, delay=150):
+	def press(key, windowname, delay=100):
 		'''Make a simple system call to press a button on a window
 		'''
 		if key not in keymap:
