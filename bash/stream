@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#script expects the name of an emulator window (string) as single input
+if [ "$#" -ne 1 ]; then
+	echo "USAGE: stream <title of window to stream>"
+	exit 1	
+fi
+
+#1: Get the audio output device you'll record off:
+#pacmd list-sources | awk '/name:.+\.monitor/'
+AUDIO_DEVICE=alsa_output.pci-0000_00_03.0.hdmi-stereo.monitor
+ 
+#2: Get the x windows id (linux) of the window you'll capture
+HWID=`xwininfo -name "$1" | grep "Window id" | cut -d' ' -f4`
+DWID=$(($HWID))
+
+echo capturing window titled "$1" that has x windows ID $HWID
+ 
+#3: Fire up vlc with the right parameters:
+#vlc window://$HWID :screen-fps=30 :input-slave=pulse://$AUDIO_DEVICE --sout '#transcode#{vcodec=h264,vb=800,scale=1,height=480,acodec=mpga,ab=128,channels=2,samplerate=44100}:http{mux=ts,dst=:8090/game}'
+vlc window://$HWID :screen-fps=30 :input-slave=pulse://$AUDIO_DEVICE --sout '#transcode{vcodec=h264,vb=800,scale=1,acodec=mpga,ab=128,channels=2,samplerate=44100}:http{mux=ts,dst=:8090/game}'
