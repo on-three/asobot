@@ -48,6 +48,11 @@ So the following presses right shoulder button and holds it
 ```
 :3+
 ```
+Following this, the same key could then be released (and SHOULD BE) by the following:
+```
+: 3-
+```
+The location of the `+` and `-` symbols do not matter. They are applied to the group they're in.
 
 #TODO:
 This is pretty clunky. What's needed is the following:
