@@ -13,34 +13,78 @@ DATE: Sunday, Sept 9th 2014
 
 import argparse
 import os
+import time
 
 keymap = {
-	u'Up' : u'Up', u'up' : u'Up', u'u' : u'Up', u'U' : 'Up',
-	u'Down' : u'Down', u'down' : u'Down', u'd' : u'Down', u'D' : 'Down',
-	u'Left' : u'Left', u'left' : u'Left', u'l' : u'Left', u'L' : 'Left',
-	u'Right' : u'Right', u'right' : u'Right', u'r' : u'Right', u'R' : 'Right',
-	u'a' : u'a', u'A' : u'a',
-	u'b' : u'b', u'B' : u'b',
-	u's' : u's', u'S' : u's',
-	u'x' : u'x', u'X' : u'x',
+	u'u' : u'w',
+	u'd' : u's',
+	u'l' : u'a',
+	u'r' : u'd',
+	u'a' : u'shift',
+	u'b' : u'ctrl',
+	u's' : u'Return',
+	#u'x' : u'x',
+	u'1' : u'x',#"hidari" for left shoulder button
+	u'3' : u'c',#"migi" for right shoulder button
+	u'z' : u'z',#N64 z button
+	u'5' : u'z',#N64 z button
+	u'U' : u'i',#yellow up
+	u'D' : u'k',#yellow down
+	u'L' : u'j',#yellow left
+	u'R' : u'l',#yellow right
+	u'8' : u'Up', #joystick up
+	u'2' : u'Down',
+	u'4' : u'Left',
+	u'6' : u'Right',
+
 }
 
 class Key(object):
 	@staticmethod
-	def press(key, windowname, delay=100):
-		'''Make a simple system call to press a button on a window
+	def press(key, windowname, delay=50):
+		'''Make a simple system call to press buttons on windows.
+		The input "key" can be a group of keys that are all pressed together.
+		In other words, if the key is "lu" we will first press l, then u, wait
+		the given keypress period, then release both.
+		this allows diagonal moves as well as "press x while y" type presses
+		such as are used in Pokemon Stadium.
 		'''
-		if key not in keymap:
-			return
-		k = keymap[key]
-		os_call = u'HWID=`xwininfo -name "{windowname}" | grep "Window id" | cut -d" " -f4`; \
-			DWID=$(($HWID)); \
-			xdotool windowfocus $DWID; \
-			xdotool  keydown --delay {delay} {key} keyup {key}'.format(
+		keys = [k for k in list(key)]
+		#If the sequence contains "+" it's keydown only
+		#if the sequence contains "-" it's keyup only
+		keydown_only = False
+		if u'+' in keys:
+			keydown_only = True
+		keyup_only = False
+		if u'-' in keys:
+			keyup_only = True
+ 		for k in keys:
+ 			if keyup_only: break
+			if k not in keymap:
+				continue
+			button = keymap[k]
+			os_call = u'HWID=`xwininfo -name "{windowname}" | grep "Window id" | cut -d" " -f4`; \
+				DWID=$(($HWID)); \
+				xdotool windowfocus $DWID; \
+				xdotool  keydown {button}'.format(
 				windowname=windowname,
-				key=k,
-				delay=unicode(delay))
-		retvalue = os.system(os_call.encode('utf-8'))
+				button=button)
+			os.system(os_call.encode('utf-8'))
+			#wait n milliseconds
+		time.sleep(float(delay)/1000.0)
+		for k in keys:
+			if keydown_only: break
+			if k not in keymap:
+				continue
+			button = keymap[k]
+			os_call = u'HWID=`xwininfo -name "{windowname}" | grep "Window id" | cut -d" " -f4`; \
+				DWID=$(($HWID)); \
+				xdotool windowfocus $DWID; \
+				xdotool keyup {button}'.format(
+				windowname=windowname,
+				button=button)
+			os.system(os_call.encode('utf-8'))
+
 
 
 def main():

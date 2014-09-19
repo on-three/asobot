@@ -11,10 +11,6 @@ DATE: Thursday, Jan 16th 2014
 """
 import string
 import re
-#from pytz import timezone
-#from datetime import datetime
-#import locale
-#import time
 from twisted.python import log
 
 from controls import Key
@@ -23,7 +19,7 @@ class Emulator(object):
   '''
   pass commands to a game emulator of some sort.
   '''
-  COMMAND_REGEX = ur'^(?P<command>:e |:E )(?P<commands>.+)$'
+  COMMAND_REGEX = ur'^(?P<command>:)(?P<commands>.+)$'
 
   def __init__(self, parent, emulator_window_name):
     '''
@@ -59,7 +55,8 @@ class Emulator(object):
 
   def keypresses_to_emulator(self, keys, channel):
     '''
-    say the time in current channel.
+    Split commands by spaces. Each non spaced group represents
+    a series of buttons (or joystick directions) pressed TOGETHER
     '''
     presses = [x.strip() for x in keys.split(u' ')]
     for p in presses:
