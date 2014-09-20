@@ -14,6 +14,7 @@ DATE: Sunday, Sept 9th 2014
 import argparse
 import os
 import time
+import re
 
 keymap = {
 	u'u' : u'w',
@@ -36,8 +37,11 @@ keymap = {
 	u'2' : u'Down',
 	u'4' : u'Left',
 	u'6' : u'Right',
-
+	u'x' : u'F9',#reset emulator (standard mupen64plus key)
+	u'p' : u'p', #emulator pause (not pause betwen issuing comands! note!)
 }
+
+PAUSE_REGEX = ur't(?P<pause>[\d+])'
 
 class Key(object):
 	@staticmethod
@@ -49,6 +53,14 @@ class Key(object):
 		this allows diagonal moves as well as "press x while y" type presses
 		such as are used in Pokemon Stadium.
 		'''
+		#first, does the key entered match the pause regex?(i.e. of the form "p1000" for
+		#a one second delay)
+		#the pause implemented here is blocking. which is a pretty dumb thing to do
+		#but i'll have to build some sort of message queue to implement it better.
+		if re.match(key, PAUSE_REGEX):
+			pause = re.match(key, PAUSE_REGEX).groupdict()['pause']
+			time.sleep(float(delay)/1000.0)
+			return
 		keys = [k for k in list(key)]
 		#If the sequence contains "+" it's keydown only
 		#if the sequence contains "-" it's keyup only
