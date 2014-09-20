@@ -18,4 +18,5 @@ echo capturing window titled "$1" that has x windows ID $HWID
  
 #3: Fire up vlc with the right parameters:
 #vlc window://$HWID :screen-fps=30 :input-slave=pulse://$AUDIO_DEVICE --sout '#transcode#{vcodec=h264,vb=800,scale=1,height=480,acodec=mpga,ab=128,channels=2,samplerate=44100}:http{mux=ts,dst=:8090/game}'
-vlc window://$HWID :screen-fps=30 :input-slave=pulse://$AUDIO_DEVICE --sout '#transcode{vcodec=h264,vb=800,scale=1,acodec=mpga,ab=128,channels=2,samplerate=44100}:http{mux=ts,dst=:8090/game}'
+#vlc window://$HWID :screen-fps=30 :input-slave=pulse://$AUDIO_DEVICE --sout '#transcode{vcodec=h264,vb=800,scale=1,acodec=mpga,ab=128,channels=2,samplerate=44100}:http{mux=ts,dst=:8090/game}'
+cvlc window://$HWID :screen-fps=25 :input-slave=pulse://$AUDIO_DEVICE --sout '#transcode{vcodec=h264,vb=800,scale=1,height=480,fps=25,venc=x264{aud,profile=baseline,level=30,keyint=30,ref=1},acodec=mpga,ab=128,channels=2,samplerate=44100}:http{mux=ts,dst=:8090/game}'
