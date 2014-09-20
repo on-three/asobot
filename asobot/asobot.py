@@ -74,7 +74,7 @@ class Asobot(twisted_irc.IRCClient):
   def connectionMade(self):
     log.msg('connection made')
     twisted_irc.IRCClient.connectionMade(self)
-    Asobot.plugins.append(Emulator(self, u'Nestopia'))
+    Asobot.plugins.append(Emulator(self, u"Mupen64Plus OpenGL Video Plugin by Rice v2.0.0"))
 
   def connectionLost(self, reason):
     log.msg('connection lost')
