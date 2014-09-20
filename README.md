@@ -26,6 +26,8 @@ Commands must begin with a colon(:) and may contain the following:
 * 8, 2, 4, 6: secondary joystick (u, d, l, r)
 * + = keydown only
 * - = Keyup only
+* t1000 = a pause of 1 second (1000 milliseconds) carried out between commands
+* p = pause or unpause the emulator itself
 
 Note that the shoulder and joystick directions can be more easily remembered if one looks at eh numer keypad.
 
@@ -53,6 +55,13 @@ Following this, the same key could then be released (and SHOULD BE) by the follo
 : 3-
 ```
 The location of the `+` and `-` symbols do not matter. They are applied to the group they're in.
+
+Additionally key pauses can be inserted between other commands. These must be expressed in milliseconds and in the formt "t<number of milliseconds>". So "t1000" is a 1 second pause. This is ueseful for making sure certain keypresses do not overlap or interfere with others. For example the following:
+```
+:u 3+ t1000 D 3-
+```
+This presses "up", holds down the right shoulder (3+) waits one second and then presses yellow down (D) before releasing the right shoulder button (3-). Pause commands can't be combined with others. They must be separated by spaces from other commands.
+
 
 #TODO:
 This is pretty clunky. What's needed is the following:
